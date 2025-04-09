@@ -28,7 +28,43 @@ Flower::Flower(sf::RenderWindow& window) : window(window)
 
 void Flower::draw()
 {
-    
+    // Sun animation
+    if (clock.getElapsedTime().asMilliseconds() > 120)
+    {
+        if (shrinking)
+            currentRadius -= 1.f;
+        else
+            currentRadius += 1.f;
+
+        if (currentRadius <= 15.f)
+            shrinking = false;
+        else if (currentRadius >= 20.f)
+            shrinking = true;
+
+        sun.setRadius(currentRadius);
+        sun.setOrigin(sf::Vector2f(currentRadius, currentRadius));
+        sun.setPosition(sf::Vector2f(20.f, 20.f));
+
+        clock.restart();
+    }
+
+    float deltaTime = clock.getElapsedTime().asSeconds();
+
+    // Leaf swinging animation
+    if (deltaTime > 0.1206f)
+    {
+        if (rotateRight)
+            leafAngle += 1.f;
+        else
+            leafAngle -= 1.f;
+
+        if (leafAngle > 10.f)
+            rotateRight = false;
+        else if (leafAngle < -10.f)
+            rotateRight = true;
+
+        leaf.setRotation(sf::degrees(leafAngle));
+    }
 
     // Draw all parts
     window.draw(sun);
